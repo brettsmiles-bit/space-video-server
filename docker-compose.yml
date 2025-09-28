@@ -1,0 +1,10 @@
+services:
+  space-video-server:
+    build: .
+    container_name: space-video-server
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    volumes:
+      - .:/app
