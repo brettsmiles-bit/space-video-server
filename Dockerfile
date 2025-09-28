@@ -1,27 +1,25 @@
-# Use slim Python base
+# Use slim Python base image
 FROM python:3.10-slim
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
+# Install ffmpeg and dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
     ffmpeg \
-    build-essential \
     && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /app
 
-# Copy dependency list
+# Copy requirements first (better caching)
 COPY requirements.txt .
 
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy app code
+# Copy the rest of the app
 COPY . .
 
-# Set environment
-ENV PYTHONUNBUFFERED=1
-ENV FLASK_APP=app.py
+# Expose Render's port (optional, for clarity)
+EXPOSE 10000
 
-# Run app (Render sets $PORT automatically)
+# Run the Flask app (Render sets $PORT automatically)
 CMD ["python", "app.py"]

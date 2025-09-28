@@ -1,14 +1,60 @@
 import os
+import io
+import requests
+import feedparser
 from flask import Flask, request, jsonify
 from moviepy import ImageClip, VideoFileClip, AudioFileClip, concatenate_videoclips
-import requests
-import tempfile
 
 app = Flask(__name__)
 
+# ------------------------------
+# Utility: download a file with headers + fallback
+# ------------------------------
+def download_file(url, dest_path, headers=None):
+    try:
+        headers = headers or {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+        }
+        r = requests.get(url, headers=headers, stream=True, timeout=15)
+        r.raise_for_status()
+        with open(dest_path, "wb") as f:
+            for chunk in r.iter_content(chunk_size=8192):
+                f.write(chunk)
+    except Exception as e:
+        raise RuntimeError(f"Failed to download {url} ({e})")
+
+# ------------------------------
+# Routes
+# ------------------------------
+
 @app.route("/health", methods=["GET"])
 def health():
-    return jsonify({"status": "success", "data": {"message": "ok"}})
+    return jsonify({"status": "success", "data": {"message": "ok"}}), 200
+
+
+@app.route("/scrape-news", methods=["GET"])
+def scrape_news():
+    sources = {
+        "NASA": "https://www.nasa.gov/rss/dyn/breaking_news.rss",
+        "ESA": "https://www.esa.int/rssfeed/Our_Activities",
+        "Space.com": "https://www.space.com/feeds/all",
+        "CNN": "http://rss.cnn.com/rss/edition_space.rss",
+        "SpaceX": "https://www.spacex.com/updates/feed/rss.xml"
+    }
+
+    results = {}
+    for name, url in sources.items():
+        try:
+            feed = feedparser.parse(url)
+            entries = [
+                {"title": e.title, "url": e.link}
+                for e in feed.entries[:5]
+            ]
+            results[name] = entries
+        except Exception as e:
+            results[name] = [{"title": f"Error: {e}", "url": url}]
+    return jsonify({"status": "success", "data": results}), 200
+
 
 @app.route("/process", methods=["POST"])
 def process():
@@ -16,56 +62,44 @@ def process():
     audio_url = data.get("audio_url")
     media_urls = data.get("media_urls", [])
 
-    if not media_urls:
-        return jsonify({"status": "error", "error": "No media URLs provided"}), 400
+    if not audio_url or not media_urls:
+        return jsonify({"status": "error", "error": "audio_url and media_urls are required"}), 400
 
+    # Download audio
+    audio_path = "/tmp/audio.wav"
     try:
-        # Download audio
-        audio_path = download_file(audio_url, suffix=".wav")
-
-        # Download images
-        clips = []
-        for url in media_urls:
-            img_path = download_file(url, suffix=".jpg")
-            clip = ImageClip(img_path).set_duration(3)
-            clips.append(clip)
-
-        video = concatenate_videoclips(clips, method="compose")
-
-        # Add audio
-        if audio_path:
-            audio = AudioFileClip(audio_path)
-            video = video.set_audio(audio)
-
-        # Save to temp file
-        tmp_video = tempfile.NamedTemporaryFile(delete=False, suffix=".mp4")
-        tmp_video_path = tmp_video.name
-        tmp_video.close()
-
-        video.write_videofile(tmp_video_path, codec="libx264", audio_codec="aac")
-
-        return jsonify({"status": "success", "data": {"video_path": tmp_video_path}})
-
+        download_file(audio_url, audio_path)
     except Exception as e:
-        return jsonify({"status": "error", "error": str(e)}), 500
+        return jsonify({"status": "error", "error": f"Failed to download audio: {e}"}), 400
 
-def download_file(url, suffix=""):
-    """Download a file from URL and return the local path."""
-    if not url:
-        return None
+    # Download media (images/videos)
+    clips = []
+    for i, url in enumerate(media_urls):
+        dest = f"/tmp/media_{i}.jpg"
+        try:
+            download_file(url, dest)
+            clip = ImageClip(dest).set_duration(5)
+            clips.append(clip)
+        except Exception as e:
+            return jsonify({"status": "error", "error": f"Failed to download/process media: {url} ({e})"}), 400
 
-    resp = requests.get(url, stream=True, timeout=30, headers={
-        "User-Agent": "Mozilla/5.0"
-    })
-    resp.raise_for_status()
+    # Concatenate video
+    try:
+        video = concatenate_videoclips(clips, method="compose")
+        audio = AudioFileClip(audio_path)
+        video = video.set_audio(audio)
 
-    tmp = tempfile.NamedTemporaryFile(delete=False, suffix=suffix)
-    with open(tmp.name, "wb") as f:
-        for chunk in resp.iter_content(chunk_size=8192):
-            f.write(chunk)
+        output_path = "/tmp/output.mp4"
+        video.write_videofile(output_path, codec="libx264", audio_codec="aac", fps=24)
 
-    return tmp.name
+        return jsonify({"status": "success", "data": {"message": "Video processed successfully", "output": "/tmp/output.mp4"}}), 200
+    except Exception as e:
+        return jsonify({"status": "error", "error": f"Failed to process video: {e}"}), 500
 
+
+# ------------------------------
+# Main entrypoint for Render
+# ------------------------------
 if __name__ == "__main__":
-    port = int(os.getenv("PORT", 5000))  # ✅ Render uses $PORT
+    port = int(os.getenv("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
