@@ -1,6 +1,6 @@
 import os
 from flask import Flask, request, jsonify
-from moviepy.editor import ImageClip, AudioFileClip, concatenate_videoclips
+from moviepy import ImageClip, VideoFileClip, AudioFileClip, concatenate_videoclips
 import requests
 import tempfile
 
