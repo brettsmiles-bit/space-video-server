@@ -51,22 +51,44 @@ def health():
 
 @app.route("/scrape-news", methods=["GET"])
 def scrape_news():
-    results = {}
+    results = []
+
     for source, url in NEWS_SOURCES.items():
+        if source == "Blue Origin":  # skip Blue Origin
+            continue
         try:
-            feed = feedparser.parse(url)
-            if feed.bozo:
-                raise Exception(feed.bozo_exception)
-            entries = [
-                {"title": e.get("title", "No title"), "url": e.get("link", "#")}
-                for e in feed.entries[:5]
-            ]
-            results[source] = entries
+            articles = scrape_rss_feed(url)
+            for article in articles[:5]:  # collect top 5 per source
+                results.append({
+                    "headline_title": article.get("title", "No title"),
+                    "source": source,
+                    "url": article.get("url", ""),
+                    "published": article.get("published", "")  # include date
+                })
         except Exception as e:
-            results[source] = [
-                {"title": f"Error: {str(e)}", "url": url}
-            ]
-    return jsonify({"status": "success", "data": results}), 200
+            results.append({
+                "headline_title": f"Error: {e}",
+                "source": source,
+                "url": url,
+                "published": ""
+            })
+
+    # sort by published date if available
+    def parse_date(item):
+        from dateutil import parser
+        try:
+            return parser.parse(item["published"])
+        except Exception:
+            return None
+
+    results = sorted(
+        results,
+        key=lambda x: parse_date(x) or "",
+        reverse=True  # newest first
+    )
+
+    return jsonify(results)
+
 
 @app.route("/process", methods=["POST"])
 def process():
