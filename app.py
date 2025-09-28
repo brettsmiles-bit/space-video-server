@@ -2,7 +2,7 @@ import os
 import requests
 import feedparser
 from flask import Flask, request, jsonify
-from moviepy.editor import ImageClip, AudioFileClip, concatenate_videoclips
+from moviepy import ImageClip, AudioFileClip, concatenate_videoclips
 from dotenv import load_dotenv
 import tempfile
 
