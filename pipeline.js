@@ -166,7 +166,42 @@ class SpacePipeline {
   async collectNews() {
     console.log('\n📰 Collecting Space News...');
     
-    // Fallback news data in case RSS feeds are unavailable
+    try {
+      // Try to get real news from the Flask app
+      console.log('  Fetching real space news from Flask service...');
+      const response = await this.makeHttpRequest('http://localhost:5000/scrape-news');
+      
+      if (response.status === 200 && response.data.status === 'success') {
+        const realNews = response.data.data || [];
+        console.log(`  ✅ Retrieved ${realNews.length} real news articles`);
+        
+        // Convert to our format
+        const allArticles = realNews.map(item => ({
+          title: item.headline_title || 'Unknown Title',
+          source: item.source || 'Unknown Source',
+          published: item.published || new Date().toISOString(),
+          url: item.url || ''
+        }));
+        
+        // Sort by date
+        allArticles.sort((a, b) => new Date(b.published) - new Date(a.published));
+        
+        const details = {
+          articles_collected: allArticles.length,
+          sources: [...new Set(allArticles.map(a => a.source))],
+          successful_feeds: 'flask_service',
+          latest_article: allArticles.length > 0 ? allArticles[0].title : 'None'
+        };
+        
+        this.logStep('News Collection', true, details);
+        return allArticles.slice(0, 5); // Return top 5
+      }
+    } catch (error) {
+      console.log(`  ⚠️  Flask service unavailable: ${error.message}`);
+    }
+    
+    // Fallback to simulated data if Flask service is not available
+    console.log('  Using fallback simulated data...');
     const fallbackNews = [
       {
         title: "NASA Artemis Mission Achieves Major Milestone",
@@ -188,8 +223,6 @@ class SpacePipeline {
       }
     ];
     
-    // Use simulated news data to avoid network issues
-    console.log('  Using simulated news data (offline mode)...');
     const allArticles = [...fallbackNews];
     
     // Sort by date
@@ -255,9 +288,44 @@ class SpacePipeline {
     console.log('\n🖼️ Collecting Media Assets...');
     
     const mediaItems = [];
+    let realMediaCollected = false;
     
-    // Use simulated media data (offline mode)
-    console.log('  Using simulated media data (offline mode)...');
+    // Try to collect real media if API keys are available
+    if (this.config.pexels_api_key && this.config.pexels_api_key !== '') {
+      try {
+        console.log('  Attempting to collect real media from Pexels...');
+        const pexelsResponse = await this.makeHttpRequest(
+          'https://api.pexels.com/v1/search?query=space&per_page=10&orientation=landscape',
+          {
+            headers: {
+              'Authorization': this.config.pexels_api_key
+            }
+          }
+        );
+        
+        if (pexelsResponse.status === 200 && pexelsResponse.data.photos) {
+          pexelsResponse.data.photos.forEach(photo => {
+            mediaItems.push({
+              url: photo.src.large,
+              source: 'pexels',
+              type: 'image',
+              photographer: photo.photographer,
+              alt: photo.alt || 'Space image'
+            });
+          });
+          realMediaCollected = true;
+          console.log(`  ✅ Collected ${pexelsResponse.data.photos.length} real images from Pexels`);
+        }
+      } catch (error) {
+        console.log(`  ⚠️  Pexels API failed: ${error.message}`);
+      }
+    }
+    
+    // If no real media collected, use curated URLs
+    if (!realMediaCollected) {
+      console.log('  Using curated space image URLs...');
+    }
+    
     const simulatedImages = [
       'https://images.pexels.com/photos/2150/sky-space-dark-galaxy.jpg',
       'https://images.pexels.com/photos/39649/space-cosmos-universe-galaxy-39649.jpeg',
@@ -266,22 +334,25 @@ class SpacePipeline {
       'https://images.pexels.com/photos/23769/pexels-photo-23769.jpg'
     ];
     
-    simulatedImages.forEach((url, index) => {
-      mediaItems.push({
-        url: url,
-        source: 'simulated',
-        type: 'image',
-        photographer: 'Simulated Data',
-        alt: `Space image ${index + 1}`
+    // Add curated images if we don't have enough real ones
+    if (mediaItems.length < 5) {
+      simulatedImages.forEach((url, index) => {
+        mediaItems.push({
+          url: url,
+          source: realMediaCollected ? 'curated' : 'simulated',
+          type: 'image',
+          photographer: realMediaCollected ? 'Curated' : 'Simulated Data',
+          alt: `Space image ${index + 1}`
+        });
       });
-    });
+    }
     
     const details = {
       total_images: mediaItems.length,
-      pexels_count: 0,
+      pexels_count: mediaItems.filter(item => item.source === 'pexels').length,
       unsplash_count: 0,
-      simulated_count: mediaItems.filter(item => item.source === 'simulated').length,
-      api_calls_successful: 'offline_mode',
+      simulated_count: mediaItems.filter(item => item.source === 'simulated' || item.source === 'curated').length,
+      api_calls_successful: realMediaCollected ? 'partial' : 'offline_mode',
       sample_image: mediaItems.length > 0 ? mediaItems[0].alt : 'None'
     };
     
