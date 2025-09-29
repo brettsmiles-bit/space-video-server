@@ -1,0 +1,104 @@
+{
+  "workflow_id": "workflow_1759122710",
+  "start_time": "2025-09-29T05:11:50.278000",
+  "steps": [
+    {
+      "step": "Environment Validation",
+      "timestamp": "2025-09-29T05:11:50.344000",
+      "success": false,
+      "details": {
+        "configured_keys": 0,
+        "missing_keys": 5,
+        "missing_list": [
+          "OPENAI_API_KEY",
+          "PEXELS_API_KEY",
+          "UNSPLASH_ACCESS_KEY",
+          "NASA_API_KEY",
+          "ELEVENLABS_API_KEY"
+        ]
+      }
+    },
+    {
+      "step": "News Collection",
+      "timestamp": "2025-09-29T05:11:50.356000",
+      "success": true,
+      "details": {
+        "articles_collected": 3,
+        "sources": [
+          "NASA News",
+          "Space News",
+          "ESA Updates"
+        ],
+        "latest_article": "NASA Artemis Mission Achieves Major Milestone"
+      }
+    },
+    {
+      "step": "Script Generation",
+      "timestamp": "2025-09-29T05:11:50.359000",
+      "success": true,
+      "details": {
+        "word_count": 94,
+        "estimated_duration_seconds": 37.6,
+        "segments": 3,
+        "script_preview": "Welcome to Space News Today! Here are the latest developments in space exploration.\n\nStory 1: NASA A..."
+      }
+    },
+    {
+      "step": "Media Collection",
+      "timestamp": "2025-09-29T05:11:50.375000",
+      "success": true,
+      "details": {
+        "total_images": 7,
+        "pexels_count": 3,
+        "unsplash_count": 2,
+        "nasa_count": 2,
+        "sample_image": "Nebula in deep space"
+      }
+    },
+    {
+      "step": "TTS Generation",
+      "timestamp": "2025-09-29T05:11:50.379000",
+      "success": true,
+      "details": {
+        "duration_seconds": 37.6,
+        "estimated_file_size_mb": 18.8,
+        "voice_config": {
+          "voice_id": "elevenlabs_voice_001",
+          "voice_name": "Professional Narrator",
+          "language": "en-US",
+          "speed": 1.0,
+          "pitch": 0.0
+        },
+        "processing_time": "20.5 seconds"
+      }
+    },
+    {
+      "step": "Video Production",
+      "timestamp": "2025-09-29T05:11:50.386000",
+      "success": true,
+      "details": {
+        "video_duration": "37.6 seconds",
+        "resolution": "1920x1080",
+        "estimated_size_mb": 75.2,
+        "images_used": 7,
+        "production_config": {
+          "resolution": "1920x1080",
+          "fps": 30,
+          "format": "mp4",
+          "codec": "h264",
+          "bitrate": "5000k"
+        },
+        "output_file": "output/space_news_video.mp4"
+      }
+    }
+  ],
+  "status": "completed",
+  "end_time": "2025-09-29T05:11:50.389000",
+  "total_duration_seconds": 0.111,
+  "final_outputs": {
+    "script": "Welcome to Space News Today! Here are the latest developments in space exploration.\n\nStory 1: NASA Artemis Mission Achieves Major Milestone. The Artemis program has successfully completed critical testing phases, bringing humanity closer to returning to the Moon.\n\nStory 2: SpaceX Launches Advanced Satellite Constellation. SpaceX has deployed a new batch of advanced communication satellites, expanding global internet coverage.\n\nStory 3: James Webb Telescope Discovers Distant Galaxy. The James Webb Space Telescope has identified a previously unknown galaxy from the early universe.\n\nThat's all for today's space news. Stay curious, and keep looking up!",
+    "media_count": 7,
+    "audio_duration": 37.6,
+    "video_file": "output/space_news_video.mp4"
+  }
+}
