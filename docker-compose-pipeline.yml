@@ -32,10 +32,11 @@ services:
     volumes:
       - ./output:/app/output
       - ./logs:/app/logs
+      - ./.env:/app/.env
     environment:
       - NEWS_SERVICE_URL=http://space-video-server:5000
       - VIDEO_SERVICE_URL=http://space-video-server:5000
-    restart: "no"  # Run once, don't restart
+    restart: "no"
     profiles:
       - pipeline  # Only start when specifically requested
 
