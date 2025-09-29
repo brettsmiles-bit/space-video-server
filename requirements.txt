@@ -1,0 +1,7 @@
+@@ .. @@
+ Flask==2.3.3
++requests==2.31.0
+ feedparser==6.0.10
+ moviepy==1.0.3
+ python-dotenv==1.0.0
+ python-dateutil==2.8.2
