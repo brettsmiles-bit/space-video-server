@@ -1,10 +1,10 @@
 {
-  "workflow_id": "workflow_1759123730976",
-  "start_time": "2025-09-29T05:28:50.976Z",
+  "workflow_id": "workflow_1759123839480",
+  "start_time": "2025-09-29T05:30:39.480Z",
   "steps": [
     {
       "step": "Environment Validation",
-      "timestamp": "2025-09-29T05:28:50.988Z",
+      "timestamp": "2025-09-29T05:30:39.490Z",
       "success": false,
       "details": {
         "configured_keys": 0,
@@ -18,7 +18,7 @@
     },
     {
       "step": "News Collection",
-      "timestamp": "2025-09-29T05:28:51.031Z",
+      "timestamp": "2025-09-29T05:30:39.536Z",
       "success": true,
       "details": {
         "articles_collected": 3,
@@ -31,18 +31,18 @@
     },
     {
       "step": "Script Generation",
-      "timestamp": "2025-09-29T05:28:51.032Z",
+      "timestamp": "2025-09-29T05:30:39.537Z",
       "success": true,
       "details": {
-        "word_count": 63,
-        "estimated_duration_seconds": 25.2,
+        "word_count": 62,
+        "estimated_duration_seconds": 24.8,
         "segments": 3,
         "script_preview": "Get ready for another incredible journey through the latest space discoveries!\n\nStory 1: NASA Artemi..."
       }
     },
     {
       "step": "Media Collection",
-      "timestamp": "2025-09-29T05:28:51.033Z",
+      "timestamp": "2025-09-29T05:30:39.538Z",
       "success": true,
       "details": {
         "total_images": 5,
@@ -55,11 +55,11 @@
     },
     {
       "step": "TTS Generation",
-      "timestamp": "2025-09-29T05:28:51.034Z",
+      "timestamp": "2025-09-29T05:30:39.539Z",
       "success": true,
       "details": {
-        "duration_seconds": 25.2,
-        "estimated_file_size_mb": 12.6,
+        "duration_seconds": 24.8,
+        "estimated_file_size_mb": 12.4,
         "voice_config": {
           "voice_id": "tts_openai_alloy",
           "voice_name": "Alloy",
@@ -67,18 +67,18 @@
           "speed": 1,
           "pitch": 0
         },
-        "processing_time": "14 seconds",
+        "processing_time": "10 seconds",
         "api_called": false
       }
     },
     {
       "step": "Video Production",
-      "timestamp": "2025-09-29T05:28:51.035Z",
+      "timestamp": "2025-09-29T05:30:39.544Z",
       "success": true,
       "details": {
-        "video_duration": "25.2 seconds",
+        "video_duration": "24.8 seconds",
         "resolution": "1920x1080",
-        "estimated_size_mb": 50.4,
+        "estimated_size_mb": 49.6,
         "images_used": 5,
         "production_config": {
           "resolution": "1920x1080",
@@ -92,12 +92,12 @@
     }
   ],
   "status": "completed",
-  "end_time": "2025-09-29T05:28:51.035Z",
-  "total_duration_seconds": 0.059,
+  "end_time": "2025-09-29T05:30:39.546Z",
+  "total_duration_seconds": 0.066,
   "final_outputs": {
-    "script": "Get ready for another incredible journey through the latest space discoveries!\n\nStory 1: NASA Artemis Mission Achieves Major Milestone. This update comes from NASA News. \n\nStory 2: SpaceX Launches Advanced Satellite Constellation. This update comes from Space News. \n\nStory 3: James Webb Telescope Discovers Distant Galaxy. This update comes from ESA Updates. \n\nThat's all for today's space news. Stay curious, and keep looking up!",
+    "script": "Get ready for another incredible journey through the latest space discoveries!\n\nStory 1: NASA Artemis Mission Achieves Major Milestone. This update comes from NASA News. \n\nStory 2: SpaceX Launches Advanced Satellite Constellation. This update comes from Space News. \n\nStory 3: James Webb Telescope Discovers Distant Galaxy. This update comes from ESA Updates. \n\nThanks for joining us on this cosmic journey. Until next time!",
     "media_count": 5,
-    "audio_duration": 25.2,
+    "audio_duration": 24.8,
     "video_file": "output/space_news_video.mp4",
     "video_url": "https://example.com/space_news_video.mp4"
   }

@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y \
     ffmpeg \
     curl \
     build-essential \
+    python3-dev \
     libssl-dev \
     zlib1g-dev \
     && rm -rf /var/lib/apt/lists/*
