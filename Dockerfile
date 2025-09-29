@@ -16,6 +16,10 @@ RUN apt-get update && apt-get install -y \
     python3-dev \
     libssl-dev \
     zlib1g-dev \
+    procps \
+    grep \
+    gawk \
+    findutils \
     && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
