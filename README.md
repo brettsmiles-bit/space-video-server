@@ -74,18 +74,26 @@ An automated workflow system for creating engaging space-themed YouTube videos u
 
 ### 3. Start Services
 
+**IMPORTANT**: The Python Flask server (`app.py`) must be running before executing any pipeline operations.
+
+**Start the Flask Server First**:
+```bash
+# In one terminal, start the Flask news service
+python app.py
+```
+
 **Option A: Docker Compose (Recommended)**
 ```bash
 # Start the video production service
 docker-compose up -d
 
-# Run a single workflow
+# In another terminal, run a single workflow
 docker-compose --profile pipeline up pipeline-orchestrator
 ```
 
 **Option B: Local Development**
 ```bash
-# Start the video service
+# In one terminal, start the Flask news service
 python app.py
 
 # In another terminal, run the pipeline
@@ -94,18 +102,23 @@ python main.py --duration 120 --voice alloy
 
 ### 4. Run Workflows
 
+**Prerequisites**: Ensure the Flask server is running (`python app.py`) before running any workflows.
+
 **Single Run**:
 ```bash
+# Make sure Flask server is running first: python app.py
 python main.py --duration 120 --voice nova
 ```
 
 **Health Check**:
 ```bash
+# Make sure Flask server is running first: python app.py
 python main.py --health-check
 ```
 
 **Scheduled Runs**:
 ```bash
+# Make sure Flask server is running first: python app.py
 python scheduler.py
 ```
 
