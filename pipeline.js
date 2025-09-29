@@ -53,23 +53,53 @@ class SpacePipeline {
         port: urlObj.port,
         path: urlObj.pathname + urlObj.search,
         method: options.method || 'GET',
-        headers: options.headers || {}
+        headers: options.headers || {},
+        timeout: 10000 // 10 second timeout
       };
 
       const req = client.request(requestOptions, (res) => {
+        // Check for valid status code
+        if (typeof res.statusCode !== 'number') {
+          reject(new Error('Invalid response - no status code'));
+          return;
+        }
+        
+        // Handle HTTP error status codes
+        if (res.statusCode >= 400) {
+          reject(new Error(`HTTP ${res.statusCode}: ${res.statusMessage || 'Request failed'}`));
+          return;
+        }
+        
         let data = '';
         res.on('data', chunk => data += chunk);
         res.on('end', () => {
           try {
-            const result = JSON.parse(data);
+            // Try to parse as JSON, but don't fail if it's not JSON
+            let result;
+            try {
+              result = JSON.parse(data);
+            } catch (e) {
+              result = data; // Return raw data if not JSON
+            }
             resolve({ status: res.statusCode, data: result });
           } catch (e) {
-            resolve({ status: res.statusCode, data: data });
+            reject(new Error(`Response parsing failed: ${e.message}`));
           }
+        });
+        
+        res.on('error', (err) => {
+          reject(new Error(`Response error: ${err.message}`));
         });
       });
 
-      req.on('error', reject);
+      req.on('error', (err) => {
+        reject(new Error(`Request error: ${err.message}`));
+      });
+      
+      req.on('timeout', () => {
+        req.destroy();
+        reject(new Error('Request timeout'));
+      });
       
       if (options.body) {
         req.write(JSON.stringify(options.body));
@@ -82,12 +112,15 @@ class SpacePipeline {
   async parseRSSFeed(url) {
     try {
       const response = await this.makeHttpRequest(url);
-      if (response.status !== 200) {
-        throw new Error(`HTTP ${response.status}`);
-      }
 
       // Simple XML parsing for RSS feeds
       const xmlData = response.data;
+      
+      // Check if we got valid XML data
+      if (typeof xmlData !== 'string' || !xmlData.includes('<')) {
+        throw new Error('Invalid RSS feed format');
+      }
+      
       const items = [];
       
       // Extract items using regex (simple approach for WebContainer)
@@ -107,7 +140,7 @@ class SpacePipeline {
       
       return items;
     } catch (error) {
-      console.error(`Failed to parse RSS feed ${url}:`, error.message);
+      console.error(`Failed to parse RSS feed ${url}: ${error.message}`);
       return [];
     }
   }
