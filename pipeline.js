@@ -19,7 +19,8 @@ class SpacePipeline {
       tts_openai_api_key: process.env.TTS_OPENAI_API_KEY || '',
       pexels_api_key: process.env.PEXELS_API_KEY || '',
       unsplash_access_key: process.env.UNSPLASH_ACCESS_KEY || '',
-      nasa_api_key: process.env.NASA_API_KEY || 'DEMO_KEY'
+      nasa_api_key: process.env.NASA_API_KEY || 'DEMO_KEY',
+      news_service_url: process.env.NEWS_SERVICE_URL || 'http://localhost:5000'
     };
   }
 
@@ -169,7 +170,9 @@ class SpacePipeline {
     try {
       // Try to get real news from the Flask app
       console.log('  Fetching real space news from Flask service...');
-      const response = await this.makeHttpRequest('http://localhost:5000/scrape-news');
+      const newsUrl = `${this.config.news_service_url}/scrape-news`;
+      console.log(`  Connecting to: ${newsUrl}`);
+      const response = await this.makeHttpRequest(newsUrl);
       
       if (response.status === 200 && response.data.status === 'success') {
         const realNews = response.data.data || [];
