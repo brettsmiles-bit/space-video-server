@@ -443,9 +443,23 @@ class SpacePipeline {
   async healthCheck() {
     console.log('\n🏥 Running Health Check...');
     
+    // Test Flask service connection
+    let newsServiceHealthy = false;
+    try {
+      console.log(`  Testing Flask service at ${this.config.news_service_url}...`);
+      const response = await this.makeHttpRequest(`${this.config.news_service_url}/health`);
+      newsServiceHealthy = response.status === 200;
+      if (newsServiceHealthy) {
+        console.log('  ✅ Flask service is responding');
+      }
+    } catch (error) {
+      console.log(`  ❌ Flask service unavailable: ${error.message}`);
+      console.log('  💡 Make sure to run the Flask server: python app.py');
+    }
+    
     const services = {
       'Environment': await this.validateEnvironment(),
-      'News Sources': true, // RSS feeds are generally available
+      'Flask News Service': newsServiceHealthy,
       'Media APIs': !!(this.config.pexels_api_key && this.config.unsplash_access_key),
       'TTS Service': !!this.config.tts_openai_api_key
     };

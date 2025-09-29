@@ -1,10 +1,10 @@
 {
-  "workflow_id": "workflow_1759124741274",
-  "start_time": "2025-09-29T05:45:41.274Z",
+  "workflow_id": "workflow_1759124800163",
+  "start_time": "2025-09-29T05:46:40.163Z",
   "steps": [
     {
       "step": "Environment Validation",
-      "timestamp": "2025-09-29T05:45:41.279Z",
+      "timestamp": "2025-09-29T05:46:40.171Z",
       "success": false,
       "details": {
         "configured_keys": 0,
@@ -18,7 +18,7 @@
     },
     {
       "step": "News Collection",
-      "timestamp": "2025-09-29T05:45:41.315Z",
+      "timestamp": "2025-09-29T05:46:40.216Z",
       "success": true,
       "details": {
         "articles_collected": 3,
@@ -31,7 +31,7 @@
     },
     {
       "step": "Script Generation",
-      "timestamp": "2025-09-29T05:45:41.316Z",
+      "timestamp": "2025-09-29T05:46:40.218Z",
       "success": true,
       "details": {
         "word_count": 64,
@@ -42,7 +42,7 @@
     },
     {
       "step": "Media Collection",
-      "timestamp": "2025-09-29T05:45:41.318Z",
+      "timestamp": "2025-09-29T05:46:40.220Z",
       "success": true,
       "details": {
         "total_images": 5,
@@ -55,7 +55,7 @@
     },
     {
       "step": "TTS Generation",
-      "timestamp": "2025-09-29T05:45:41.319Z",
+      "timestamp": "2025-09-29T05:46:40.221Z",
       "success": true,
       "details": {
         "duration_seconds": 25.6,
@@ -67,13 +67,13 @@
           "speed": 1,
           "pitch": 0
         },
-        "processing_time": "19 seconds",
+        "processing_time": "25 seconds",
         "api_called": false
       }
     },
     {
       "step": "Video Production",
-      "timestamp": "2025-09-29T05:45:41.320Z",
+      "timestamp": "2025-09-29T05:46:40.222Z",
       "success": true,
       "details": {
         "video_duration": "25.6 seconds",
@@ -92,8 +92,8 @@
     }
   ],
   "status": "completed",
-  "end_time": "2025-09-29T05:45:41.321Z",
-  "total_duration_seconds": 0.047,
+  "end_time": "2025-09-29T05:46:40.223Z",
+  "total_duration_seconds": 0.06,
   "final_outputs": {
     "script": "Welcome to Space News Today! Here are the latest developments in space exploration.\n\nStory 1: NASA Artemis Mission Achieves Major Milestone. This update comes from NASA News. \n\nStory 2: SpaceX Launches Advanced Satellite Constellation. This update comes from Space News. \n\nStory 3: James Webb Telescope Discovers Distant Galaxy. This update comes from ESA Updates. \n\nKeep exploring the wonders of the universe. See you next time!",
     "media_count": 5,
