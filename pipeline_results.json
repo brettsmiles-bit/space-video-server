@@ -1,10 +1,10 @@
 {
-  "workflow_id": "workflow_1759124853293",
-  "start_time": "2025-09-29T05:47:33.293Z",
+  "workflow_id": "workflow_1759125128995",
+  "start_time": "2025-09-29T05:52:08.995Z",
   "steps": [
     {
       "step": "Environment Validation",
-      "timestamp": "2025-09-29T05:47:33.299Z",
+      "timestamp": "2025-09-29T05:52:09.003Z",
       "success": false,
       "details": {
         "configured_keys": 0,
@@ -18,7 +18,7 @@
     },
     {
       "step": "News Collection",
-      "timestamp": "2025-09-29T05:47:33.351Z",
+      "timestamp": "2025-09-29T05:52:09.042Z",
       "success": true,
       "details": {
         "articles_collected": 3,
@@ -31,18 +31,18 @@
     },
     {
       "step": "Script Generation",
-      "timestamp": "2025-09-29T05:47:33.352Z",
+      "timestamp": "2025-09-29T05:52:09.044Z",
       "success": true,
       "details": {
-        "word_count": 60,
-        "estimated_duration_seconds": 24,
+        "word_count": 61,
+        "estimated_duration_seconds": 24.4,
         "segments": 3,
         "script_preview": "Greetings, space enthusiasts! Let's dive into today's cosmic updates.\n\nStory 1: NASA Artemis Mission..."
       }
     },
     {
       "step": "Media Collection",
-      "timestamp": "2025-09-29T05:47:33.355Z",
+      "timestamp": "2025-09-29T05:52:09.051Z",
       "success": true,
       "details": {
         "total_images": 5,
@@ -55,11 +55,11 @@
     },
     {
       "step": "TTS Generation",
-      "timestamp": "2025-09-29T05:47:33.355Z",
+      "timestamp": "2025-09-29T05:52:09.055Z",
       "success": true,
       "details": {
-        "duration_seconds": 24,
-        "estimated_file_size_mb": 12,
+        "duration_seconds": 24.4,
+        "estimated_file_size_mb": 12.2,
         "voice_config": {
           "voice_id": "tts_openai_alloy",
           "voice_name": "Alloy",
@@ -73,12 +73,12 @@
     },
     {
       "step": "Video Production",
-      "timestamp": "2025-09-29T05:47:33.356Z",
+      "timestamp": "2025-09-29T05:52:09.056Z",
       "success": true,
       "details": {
-        "video_duration": "24 seconds",
+        "video_duration": "24.4 seconds",
         "resolution": "1920x1080",
-        "estimated_size_mb": 48,
+        "estimated_size_mb": 48.8,
         "images_used": 5,
         "production_config": {
           "resolution": "1920x1080",
@@ -92,12 +92,12 @@
     }
   ],
   "status": "completed",
-  "end_time": "2025-09-29T05:47:33.357Z",
-  "total_duration_seconds": 0.064,
+  "end_time": "2025-09-29T05:52:09.057Z",
+  "total_duration_seconds": 0.062,
   "final_outputs": {
-    "script": "Greetings, space enthusiasts! Let's dive into today's cosmic updates.\n\nStory 1: NASA Artemis Mission Achieves Major Milestone. This update comes from NASA News. \n\nStory 2: SpaceX Launches Advanced Satellite Constellation. This update comes from Space News. \n\nStory 3: James Webb Telescope Discovers Distant Galaxy. This update comes from ESA Updates. \n\nKeep exploring the wonders of the universe. See you next time!",
+    "script": "Greetings, space enthusiasts! Let's dive into today's cosmic updates.\n\nStory 1: NASA Artemis Mission Achieves Major Milestone. This update comes from NASA News. \n\nStory 2: SpaceX Launches Advanced Satellite Constellation. This update comes from Space News. \n\nStory 3: James Webb Telescope Discovers Distant Galaxy. This update comes from ESA Updates. \n\nThat's all for today's space news. Stay curious, and keep looking up!",
     "media_count": 5,
-    "audio_duration": 24,
+    "audio_duration": 24.400000000000002,
     "video_file": "output/space_news_video.mp4",
     "video_url": "https://example.com/space_news_video.mp4"
   }
