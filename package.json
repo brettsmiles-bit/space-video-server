@@ -1,0 +1,15 @@
+{
+  "name": "youtube-space-pipeline",
+  "version": "1.0.0",
+  "description": "Automated workflow for creating space-themed YouTube videos",
+  "main": "pipeline.js",
+  "type": "module",
+  "scripts": {
+    "start": "node pipeline.js",
+    "health": "node pipeline.js --health-check",
+    "schedule": "node scheduler.js"
+  },
+  "keywords": ["youtube", "space", "video", "automation", "pipeline"],
+  "author": "",
+  "license": "MIT"
+}

@@ -1,7 +1,0 @@
-# YouTube Space Video Pipeline Requirements
-requests>=2.31.0
-python-dotenv>=1.0.0
-feedparser>=6.0.10
-python-dateutil>=2.8.2
-Pillow>=10.0.0
-schedule>=1.2.0
