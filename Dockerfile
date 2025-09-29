@@ -13,6 +13,8 @@ RUN apt-get update && apt-get install -y \
     ffmpeg \
     curl \
     build-essential \
+    libssl-dev \
+    zlib1g-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
